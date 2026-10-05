@@ -1,130 +1,14 @@
-function Blog() {
-  return (
-    
-    <div className="max-w-7xl mx-auto px-6 py-32">
-
-      <div className="text-center mb-16">
-
-        <h1 className="text-5xl font-bold mb-4">
-          Seyahat Blogları
-        </h1>
-
-        <p className="text-gray-400">
-          En yeni gezi rehberleri ve seyahat önerileri
-        </p>
-
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-
-        <div className="bg-white/10 rounded-3xl overflow-hidden hover:scale-105 transition">
-
-          <img
-            src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop"
-            className="h-64 w-full object-cover"
-          />
-
-          <div className="p-6">
-
-            <h2 className="text-2xl font-bold mb-4">
-              Avrupa Turu Rehberi
-            </h2>
-<div className="text-yellow-400 mb-4 text-xl">
-  ★★★★★
-</div>
-            <p className="text-gray-300 mb-6">
-              Avrupa'da gezilecek en güzel şehirler.
-            </p>
-
-            <button className="bg-cyan-400 text-black px-5 py-3 rounded-full font-semibold">
-              Devamını Oku
-            </button>
-
-          </div>
-
-        </div>
-
-        <div className="bg-white/10 rounded-3xl overflow-hidden hover:scale-105 transition">
-
-          <img
-            src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=2070&auto=format&fit=crop"
-            className="h-64 w-full object-cover"
-          />
-
-          <div className="p-6">
-
-            <h2 className="text-2xl font-bold mb-4">
-              Kamp Rotaları
-            </h2>
-
-            <p className="text-gray-300 mb-6">
-              Doğa severler için harika kamp alanları.
-            </p>
-
-            <button className="bg-cyan-400 text-black px-5 py-3 rounded-full font-semibold">
-              Devamını Oku
-            </button>
-
-          </div>
-
-        </div>
-
-        <div className="bg-white/10 rounded-3xl overflow-hidden hover:scale-105 transition">
-
-          <img
-            src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1974&auto=format&fit=crop"
-            className="h-64 w-full object-cover"
-          />
-
-          <div className="p-6">
-
-            <h2 className="text-2xl font-bold mb-4">
-              Deniz Tatili Önerileri
-            </h2>
-
-            <p className="text-gray-300 mb-6">
-              Yaz tatili için en iyi sahil rotaları.
-            </p>
-
-            <button className="bg-cyan-400 text-black px-5 py-3 rounded-full font-semibold">
-              Devamını Oku
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-      <div className="mt-20 bg-white/10 p-10 rounded-3xl">
-
-  <h2 className="text-3xl font-bold mb-8">
-    Yorum Yap
-  </h2>
-
-  <div className="grid gap-6">
-
-    <input
-      type="text"
-      placeholder="Adınız"
-      className="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none"
-    />
-
-    <textarea
-      placeholder="Yorumunuz"
-      rows="5"
-      className="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none"
-    ></textarea>
-
-    <button className="bg-cyan-400 text-black py-4 rounded-2xl font-bold hover:scale-105 transition">
-      Yorumu Gönder
-    </button>
-
-  </div>
-
-</div>
-
-    </div>
-  )
+import { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { articles, photo } from '../data'
+function readComments(id){try{const data=JSON.parse(localStorage.getItem(`voyago-comments-${id}`)||'[]');return Array.isArray(data)?data.filter(x=>typeof x.name==='string'&&typeof x.text==='string').slice(0,50):[]}catch{return []}}
+function Comments({id}){
+ const [comments,setComments]=useState(()=>readComments(id));const [notice,setNotice]=useState('')
+ function submit(e){e.preventDefault();const form=e.currentTarget;const data=new FormData(form);const name=data.get('name').trim();const text=data.get('comment').trim();if(!name||!text){setNotice('Lütfen adını ve yorumunu yaz.');return}const next=[...comments,{id:Date.now(),name,text}].slice(-50);setComments(next);try{localStorage.setItem(`voyago-comments-${id}`,JSON.stringify(next));setNotice('Yorum bu tarayıcıya kaydedildi; diğer ziyaretçilerle paylaşılmaz.')}catch{setNotice('Yorum bu oturumda eklendi; tarayıcıya kaydedilemedi.')}form.reset()}
+ return <section className="panel"><h2>Yorumlar</h2><p className="muted">Demo: Yorumlar yalnızca bu tarayıcıda tutulur, sunucuya gönderilmez.</p><form onSubmit={submit}><label>Adın<input name="name" required maxLength={60} autoComplete="name"/></label><label>Yorumun<textarea name="comment" required maxLength={1000} rows={4}/></label><button className="button" type="submit">Yorumu ekle</button></form><p role="status">{notice}</p>{comments.length===0?<p>Henüz yorum yok.</p>:comments.map((c,i)=><div className="comment" key={`${c.id}-${i}`}><strong>{c.name}</strong><p>{c.text}</p></div>)}</section>
 }
-
-export default Blog
+export default function Blog(){const {articleId}=useParams();const article=articles.find(a=>a.id===articleId)
+ if(articleId&&!article)return <section className="container page"><h1>Yazı bulunamadı</h1><Link to="/blog">Bloga dön</Link></section>
+ if(article)return <article className="container page narrow"><Link to="/blog">← Tüm yazılar</Link><h1>{article.title}</h1><img className="detail-image" src={photo(article.image)} alt="Temsili seyahat manzarası"/>{article.paragraphs.map(p=><p key={p}>{p}</p>)}<Comments key={article.id} id={article.id}/></article>
+ return <section className="container page"><div className="section-heading"><h1>Seyahat Blogları</h1><p>Gezi planlamanı kolaylaştıracak kısa rehberler.</p></div><div className="cards">{articles.map(a=><article className="card" key={a.id}><img src={photo(a.image,800)} alt="Temsili seyahat manzarası" loading="lazy"/><div className="card-body"><h2>{a.title}</h2><p>{a.summary}</p><Link className="button" to={`/blog/${a.id}`}>Devamını Oku</Link></div></article>)}</div></section>
+}

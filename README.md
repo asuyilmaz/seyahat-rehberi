@@ -1,16 +1,42 @@
-# React + Vite
+# Voyago — Seyahat ve Gezi Rehberi
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Fatma Asu Yılmaz tarafından eğitim kapsamında geliştirilen React tabanlı ön yüz projesidir. Gerçek bir seyahat hizmeti veya müşteri ürünü değildir.
 
-Currently, two official plugins are available:
+## Özellikler
+- Türkçe rota arama ve kategori filtreleme
+- Rota detay sayfaları ve blog yazıları
+- Yazı başına tarayıcıda saklanan demo yorumları
+- Leaflet / OpenStreetMap ile dört rota işareti
+- Responsive galeri ve mobil menü
+- Tarayıcıda saklanan açık/koyu tema tercihi
+- İletişim formunda alan doğrulama ve açık demo geri bildirimi
+- Türkçe sayfa dili, açıklama metası ve klavye odak göstergeleri
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Teknolojiler
+React, Vite, React Router, Tailwind CSS, React Leaflet, Leaflet. Orijinal projenin package.json ve kilit dosyası korunmuştur; bazı eski bağımlılıklar artık kullanılmamaktadır.
 
-## React Compiler
+## Kurulum
+Node.js: Vite 8 için 20.19+ veya 22.12+ (uyumlu daha yeni sürümler de kullanılabilir).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm ci
+npm run dev
+```
 
-## Expanding the ESLint configuration
+## Üretim kontrolü
+```bash
+npm run lint
+npm run build
+npm run preview
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Yayın
+Vercel'e GitHub deposu aktarılırken Framework: Vite, Build Command: `npm run build`, Output Directory: `dist` seçilir. `vercel.json` doğrudan açılan alt sayfaları index.html'e yönlendirir. Yayın URL'si oluşunca GitHub About → Website alanına ve bu README'ye eklenmelidir.
+
+## Demo sınırları
+- Arka uç, veritabanı, rezervasyon ve kullanıcı hesabı bulunmaz.
+- İletişim formu hiçbir mesaj göndermez veya saklamaz.
+- Yorumlar yalnızca kullanılan tarayıcının localStorage alanında tutulur; diğer ziyaretçilerle paylaşılmaz. Tarayıcı verileri silinirse yorumlar da silinir.
+- Görseller Unsplash üzerinden yüklenen temsili fotoğraflardır; ilgili destinasyonun birebir fotoğrafı oldukları iddia edilmez.
+- Harita katmanları OpenStreetMap tarafından sağlanır. Fotoğraflar ve harita internet bağlantısı gerektirir.
+- Gezi içerikleri örnektir; gerçek kullanıcı sayısı, puan veya değerlendirme verisi gösterilmez.

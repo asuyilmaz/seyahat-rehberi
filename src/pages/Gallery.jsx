@@ -1,77 +1,11 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
-import "leaflet/dist/leaflet.css"
-function Gallery() {
-  return (
-    <div className="max-w-7xl mx-auto px-6 py-32">
-
-      <div className="text-center mb-16">
-
-        <h1 className="text-5xl font-bold mb-4">
-          Gezi Galerisi
-        </h1>
-
-        <p className="text-gray-400">
-          Dünyanın en güzel manzaraları
-        </p>
-
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <img
-          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop"
-          className="rounded-3xl h-72 w-full object-cover hover:scale-105 transition"
-        />
-
-        <img
-          src="https://images.unsplash.com/photo-1493558103817-58b2924bce98?q=80&w=2070&auto=format&fit=crop"
-          className="rounded-3xl h-72 w-full object-cover hover:scale-105 transition"
-        />
-
-        <img
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop"
-          className="rounded-3xl h-72 w-full object-cover hover:scale-105 transition"
-        />
-        <img
-  src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?q=80&w=2070&auto=format&fit=crop"
-  className="rounded-3xl h-72 w-full object-cover hover:scale-105 transition"
-/>
-
-<img
-  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop"
-  className="rounded-3xl h-72 w-full object-cover hover:scale-105 transition"
-/>
-
-<img
-  src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1974&auto=format&fit=crop"
-  className="rounded-3xl h-72 w-full object-cover hover:scale-105 transition"
-/>
-
-      </div>
-<div className="mt-20 rounded-3xl overflow-hidden">
-
-  <MapContainer
-    center={[41.0082, 28.9784]}
-    zoom={5}
-    style={{ height: "500px", width: "100%" }}
-  >
-
-    <TileLayer
-      attribution='&copy; OpenStreetMap contributors'
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    />
-
-    <Marker position={[41.0082, 28.9784]}>
-      <Popup>
-        İstanbul
-      </Popup>
-    </Marker>
-
-  </MapContainer>
-
-</div>
-    </div>
-  )
-}
-
-export default Gallery
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import marker from 'leaflet/dist/images/marker-icon.png'
+import marker2x from 'leaflet/dist/images/marker-icon-2x.png'
+import shadow from 'leaflet/dist/images/marker-shadow.png'
+import { Link } from 'react-router-dom'
+import { places, photo } from '../data'
+const icon=L.icon({iconUrl:marker,iconRetinaUrl:marker2x,shadowUrl:shadow,iconSize:[25,41],iconAnchor:[12,41],popupAnchor:[1,-34],shadowSize:[41,41]})
+const images=[...places,{id:'gol',title:'Göl manzarası',image:'photo-1506744038136-46273834b3fb'},{id:'sahil',title:'Sahil manzarası',image:'photo-1493558103817-58b2924bce98'}]
+export default function Gallery(){return <section className="container page"><div className="section-heading"><h1>Gezi Galerisi</h1><p>Rotalara ilham veren temsili manzaralar.</p></div><div className="gallery-grid">{images.map(p=><figure key={p.id}><img src={photo(p.image,800)} alt={p.title+' için temsili görsel'} loading="lazy"/><figcaption>{p.title}</figcaption></figure>)}</div><h2 className="map-heading">Rotalar haritada</h2><p>İşaretlere tıklayarak rota detaylarına ulaşabilirsin. Harita ve fotoğraflar internet bağlantısı gerektirir.</p><div className="map"><MapContainer center={[28,35]} zoom={3} scrollWheelZoom={false} style={{height:'100%',width:'100%'}}><TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>{places.map(p=><Marker key={p.id} position={p.position} icon={icon}><Popup><strong>{p.title}</strong><br/><Link to={`/rotalar/${p.id}`}>Rotayı incele</Link></Popup></Marker>)}</MapContainer></div></section>}
